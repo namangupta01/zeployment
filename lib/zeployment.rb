@@ -60,4 +60,15 @@ module Zeployment
     JSON.parse(`aws elb register-instances-with-load-balancer --load-balancer-name #{name_of_load_balancer} --instances #{instance_id}`)
   end
 
+  def self.get_load_balancer_particular_instance_data (name_of_load_balancer, instance_id)
+    load_balancers_instance_description_command = "aws elb describe-instance-health --load-balancer-name #{name_of_load_balancer} --instances #{instance_id}"
+    load_balancer_instances_description = `#{load_balancers_instance_description_command}`
+    return JSON.parse(load_balancer_instances_description)
+  end
+
+  def self.instance_is_in_service? (name_of_load_balancer, instance_id)
+    load_balancer_insrance_data_hash = get_load_balancer_particular_instance_data name_of_load_balancer, instance_id
+    return load_balancer_insrance_data_hash["InstanceStates"][0]["State"] == "InService"
+  end
+
 end
