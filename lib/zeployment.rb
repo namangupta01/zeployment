@@ -52,4 +52,12 @@ module Zeployment
     return "aws ec2 describe-instances --instance-id #{instance_id}"
   end
 
+  def self.deregister_instance_from_load_balancer (name_of_load_balancer, instance_id)
+    JSON.parse(`aws elb deregister-instances-from-load-balancer --load-balancer-name #{name_of_load_balancer} --instances #{instance_id}`)
+  end
+
+  def self.register_instance_with_load_balancer (name_of_load_balancer, instance_id)
+    JSON.parse(`aws elb register-instances-with-load-balancer --load-balancer-name #{name_of_load_balancer} --instances #{instance_id}`)
+  end
+
 end
