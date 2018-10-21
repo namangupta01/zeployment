@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/zeployment.svg)](https://badge.fury.io/rb/zeployment)
+
 # Zeployment
 
 Zeployment is a gem that provides functions to easily use aws and also to perform zero downtime deployment which includes deregistering-deploying-registering of instances from load balancers.
