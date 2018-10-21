@@ -15,7 +15,6 @@ module Zeployment
       return JSON.parse(load_balancer_instances_description)
     end
 
-
     def self.get_load_balancers_instances_description_command (name_of_load_balancer)
       return "aws elb describe-instance-health --load-balancer-name #{name_of_load_balancer}"
     end
@@ -71,5 +70,30 @@ module Zeployment
       load_balancer_insrance_data_hash = get_load_balancer_particular_instance_data name_of_load_balancer, instance_id
       return load_balancer_insrance_data_hash["InstanceStates"][0]["State"] == "InService"
     end
+
+    def self.deploy (name_of_load_balancer, login_command_without_ip, commands_to_run)
+      instances_details = get_load_balancer_instances_description(name_of_load_balancer)
+      instances_details["InstanceStates"].each do |instance|
+        instance_id = instance["InstanceId"]
+        instance_ip = get_ip_address_of_ec2_from_id(instance_id)
+        puts instance_ip
+        deregister_instance_from_load_balancer(name_of_load_balancer, instance_id)
+        login_and_run_commands("#{login_command_without_ip}@#{instance_ip}", commands_to_run)
+        register_instance_with_load_balancer(name_of_load_balancer, instance_id)
+        wait_till_the_instance_in_service(name_of_load_balancer, instance_id)
+        puts ">>>>>>> Instance is in Service now <<<<<<<<<<<<<"
+      end
+    end
+
+    def self.wait_till_the_instance_in_service(name_of_load_balancer, instance_id)
+      while !instance_is_in_service?(name_of_load_balancer, instance_id) do
+        puts ">>>>>>> Instance Not in Service <<<<<<<<<<<<<"
+      end
+    end
+
+    def self.login_and_run_commands(login_command, commands_to_run)
+      system("#{login_command} << #{commands_to_run} ")
+    end
+
   end
 end
