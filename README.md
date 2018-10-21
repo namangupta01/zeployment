@@ -1,8 +1,6 @@
 # Zeployment
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/zeployment`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Zeployment is a gem that provides functions to easily use aws and also to perform zero downtime deployment which includes deregistering-deploying-registering of instances from load balancers.
 
 ## Installation
 
@@ -20,9 +18,55 @@ Or install it yourself as:
 
     $ gem install zeployment
 
-## Usage
+## Getting Started
+1. Install aws-cli on the system [Click here for Docs](https://docs.aws.amazon.com/cli/latest/userguide/installing.html "Click here for Docs")
+2. Set aws configuration [Docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html "Docs")
+(Now you are good to go)
 
-TODO: Write usage instructions here
+## Usage
+- To get the number of registered instance to the loadbalancer just use the method `number_of_registered_instances_to_loadbalancer` and pass the load balancer name as argument name and output will be the number of instances registered to the loadbalancer.
+```ruby
+Zeployment::Aws.number_of_registered_instances_to_loadbalancer (name_of_load_balancer)
+```
+
+- To Get the load balancer instances description i.e the description of each instances registered with the load balancer use the following method.
+```ruby
+Zeployment::Aws.get_load_balancer_instances_description (name_of_load_balancer)
+```
+
+- To get the number of instances regsitered with loadbalancer that is in service use the method name `number_of_instances_in_service` with the `load balancer name` as argument 
+```ruby
+Zeployment::Aws.number_of_instances_in_service (name_of_load_balancer)
+```
+- To get the number of instances regsitered with loadbalancer that is not in service use the method name `number_of_instances_not_in_service` with the `load balancer name` as argument 
+```ruby
+Zeployment::Aws.number_of_instances_not_in_service (name_of_load_balancer)
+```
+- To get the public ip address of the aws ec2 machine using the `instance id` use the method name `get_ip_address_of_ec2_from_id` and pass instance id as argument.
+```ruby
+Zeployment::Aws.get_ip_address_of_ec2_from_id (instance_id)
+```
+
+- To deregister ec2 instance from load balancer use the method `deregister_instance_from_load_balancer` and pass `name of load balancer` as first argument and `instance id` as second argument.
+```ruby
+Zeployment::Aws.deregister_instance_from_load_balancer (name_of_load_balancer, instance_id)
+```
+- To register ec2 instance with the load balancer use the method `register_instance_with_load_balancer` and pass `name of load balancer` as first argument and `instance id` as second argument.
+```ruby
+Zeployment::Aws.register_instance_with_load_balancer (name_of_load_balancer, instance_id)
+```
+- To get the particular instance status related to loadbalancer use the method `get_load_balancer_particular_instance_data` and pass `name of load balancer` as first argument and `instance id` as second argument.
+```ruby
+Zeployment::Aws.get_load_balancer_particular_instance_data (name_of_load_balancer, instance_id)
+```
+- To check if the instance is in service use the method `instance_is_in_service?` and pass `name of load balancer` as first argument and `instane id` as second argument.
+```ruby
+Zeployment::Aws.instance_is_in_service? (name_of_load_balancer, instance_id)
+```
+- To perform zero downtime deployment use the method `deploy` and pass the `name of load balancer` as first argument and `login command before ip address` as second argument and  also the commands to run for performing deployment after logging in into the machine.
+```ruby
+Zeployment::Aws.deploy (name_of_load_balancer, login_command_without_ip, commands_to_run)
+```
 
 ## Development
 
@@ -41,3 +85,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the Zeployment project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/zeployment/blob/master/CODE_OF_CONDUCT.md).
+
