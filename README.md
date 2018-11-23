@@ -2,7 +2,7 @@
 
 # Zeployment
 
-Zeployment is a gem that provides functions to easily use aws and also to perform zero downtime deployment which includes deregistering-deploying-registering of instances from load balancers.
+Zeployment is a gem that provides functions as a wrapper to aws-cli and also to perform certain deployment functionality like zero downtime deployment which includes deregistering-deploying-registering of instances from load balancer.
 
 ## Installation
 
